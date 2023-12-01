@@ -27,18 +27,14 @@ public class day1{
         // PART 2
         int sum = 0;
         while(in.hasNextLine()){
-            Pattern num = Pattern.compile("^\\btwo\\b");
-            Matcher match = num.matcher(in.nextLine());
+            String line = in.nextLine();
+            Pattern num = Pattern.compile("^(one||\\d)");
+            Matcher match = num.matcher(line);
             String temp = "";
             while(match.find()){
-                temp += "" + match.group(2);
+                System.out.printf("%s %s\n", line, "" + match.group());
             }
-            // if(temp.length() == 1){
-            //     temp += temp;
-            // }
-            // sum += Integer.parseInt(temp.substring(0,1) + temp.substring(temp.length() - 1, temp.length()));
-            System.out.println(temp);
         }
-        // System.out.println(sum);
+        
     }
 }
