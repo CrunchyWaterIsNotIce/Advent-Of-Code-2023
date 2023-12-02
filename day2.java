@@ -9,7 +9,7 @@ public class day2 {
     private static int BC = 14;
     public static void main(String[] args)throws IOException{
         Scanner in = new Scanner(new File("day2.dat"));
-        System.out.println(part1(in));
+        System.out.println(part2(in));
     }
 
     public static int part1(Scanner in){
@@ -19,7 +19,7 @@ public class day2 {
          *  the length of atleast 3 to at most 5.
          *  */
         Pattern pat = Pattern.compile("(?<=\\s)\\d+ [(?=\\w)]{3,5}");
-        
+
         while(in.hasNextLine()){
             String line = in.nextLine();
 
@@ -47,4 +47,34 @@ public class day2 {
         return sum;
     }
 
+    public static int part2(Scanner in){
+        int sum = 0;
+        Pattern pat = Pattern.compile("(?<=\\s)\\d+ [(?=\\w)]{3,5}");
+
+        while(in.hasNextLine()){
+            String line = in.nextLine();
+
+            // int id = Integer.parseInt(line.substring(line.indexOf(" ") + 1, line.indexOf(":")));
+
+            Matcher mat = pat.matcher(line);
+            int reds = Integer.MIN_VALUE;
+            int greens = Integer.MIN_VALUE;
+            int blues = Integer.MIN_VALUE;
+            while(mat.find()){
+                String temp = mat.group();
+                int numCubes = Integer.parseInt(temp.substring(0, temp.indexOf(" ")));
+                String color = temp.substring(temp.indexOf(" ") + 1);
+                
+                if(color.equals("red")){
+                    if (numCubes > reds) reds = numCubes;
+                } else if(color.equals("green")){
+                    if (numCubes > greens) greens = numCubes; 
+                } else if(color.equals("blue")){
+                    if (numCubes > blues) blues = numCubes;
+                }
+            }
+            sum += reds * greens * blues;
+        }
+        return sum;
+    }
 }
