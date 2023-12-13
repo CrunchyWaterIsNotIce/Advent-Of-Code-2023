@@ -18,12 +18,10 @@ public class day3revamp {
 
     public static int part1(Scanner in){
         int sum = 0;
-        // Pattern pat = Pattern.compile("[\\*\\$\\/@=%#&+]"); // find 
-        // (?<=[\\*\\$\\/@=%#&+])\d+|\d+(?=[\\*\\$\\/@=%#&+]) finds numbers left or right of symbol
-        // 
+
         for(int i = 1; i < linesList.size() - 1; i++){
             String line = linesList.get(i);
-            Matcher matSymbol = Pattern.compile("[\\*\\$\\/@=%#&+]").matcher(line);
+            Matcher matSymbol = Pattern.compile("[@#$%&*+=+\\-\\/]").matcher(line);
             while(matSymbol.find()){
                 
                 int sumAroundSymbol = 0;
@@ -48,16 +46,47 @@ public class day3revamp {
                     if(topPortion.matches("\\d+")){
                         sumAroundSymbol += Integer.parseInt(topPortion);
                     } else {
+                        // System.out.println(linesList.get(i - 1).substring(indexOfSymbol - 3, indexOfSymbol + 4));
                         String middleLeft = linesList.get(i - 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
-                        if(middleLeft.matches("^\\d{3}|(?<=.)\\d{2,3}|(?<=.{2})\\d")){
-                            System.out.println(middleLeft);
+                        Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
+                        if(matLeft.find() && linesList.get(i - 1).charAt(indexOfSymbol + 1) == '.'){
+                            sumAroundSymbol += Integer.parseInt(matLeft.group());
+                            // System.out.printf("%s %s\n", middleLeft, matLeft.group());
+                        }
+                        
+                        String middleRight = linesList.get(i - 1).substring(indexOfSymbol, indexOfSymbol + 4);
+                        Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
+                        if(matRight.find() && linesList.get(i - 1).charAt(indexOfSymbol - 1) == '.'){
+                            sumAroundSymbol += Integer.parseInt(matRight.group());
+                            // System.out.printf("%s %s\n", linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 4), matRight.group());
                         }
                     }
-               
-                sum += sumAroundSymbol;
-                // System.out.println(sumAroundSymbol);
-                //---------
                 }
+                // ---- BOTTOM
+                String bottomPortion = linesList.get(i + 1).substring(indexOfSymbol - 1, indexOfSymbol + 2);
+                if( !bottomPortion.equals("...")){
+                    if(bottomPortion.matches("\\d+")){
+                        sumAroundSymbol += Integer.parseInt(bottomPortion);
+                    } else {
+
+                        String middleLeft = linesList.get(i + 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
+                        Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
+                        if(matLeft.find() && linesList.get(i + 1).charAt(indexOfSymbol + 1) == '.'){ //DOESNT READ 4_4
+                            sumAroundSymbol += Integer.parseInt(matLeft.group());
+                            // System.out.printf("%s %s\n", middleLeft, matLeft.group());
+                        }
+                        
+                        String middleRight = linesList.get(i + 1).substring(indexOfSymbol, indexOfSymbol + 4);
+                        Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
+                        if(matRight.find() && linesList.get(i + 1).charAt(indexOfSymbol - 1) == '.'){ //DOESNT READ 4_4
+                            sumAroundSymbol += Integer.parseInt(matRight.group());
+                            // System.out.printf("%s %s\n", linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 4), matRight.group());
+                        }
+                    }
+                }
+                sum += sumAroundSymbol;
+                System.out.println(sumAroundSymbol);
+                //---------
 
             }
         }
