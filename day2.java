@@ -72,6 +72,7 @@ public class day2 {
                 } else if(color.equals("blue")){
                     if (numCubes > blues) blues = numCubes;
                 }
+                System.out.println(temp);
             }
             sum += reds * greens * blues;
         }
