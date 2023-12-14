@@ -40,52 +40,49 @@ public class day3revamp {
                 }
 
 
-                //--------------------------------------------
+                // top
                 String topPortion = linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 2);
                 if( !topPortion.equals("...")){
-                    if(topPortion.matches("\\d+")){
+                    if(topPortion.matches("^\\d{3}")){
                         sumAroundSymbol += Integer.parseInt(topPortion);
                     } else {
-                        // System.out.println(linesList.get(i - 1).substring(indexOfSymbol - 3, indexOfSymbol + 4));
                         String middleLeft = linesList.get(i - 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
                         Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
-                        if(matLeft.find() && linesList.get(i - 1).charAt(indexOfSymbol + 1) == '.'){
+                        if(matLeft.find() && topPortion.matches("^(\\d{1}|[.]{1}[^..])\\d?([.]{1,2}[\\d]?)$") ){ // INCLUDES CASE .3.
                             sumAroundSymbol += Integer.parseInt(matLeft.group());
-                            // System.out.printf("%s %s\n", middleLeft, matLeft.group());
                         }
                         
                         String middleRight = linesList.get(i - 1).substring(indexOfSymbol, indexOfSymbol + 4);
                         Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
-                        if(matRight.find() && linesList.get(i - 1).charAt(indexOfSymbol - 1) == '.'){
+                        if(matRight.find() && topPortion.matches("^(\\d{1}|[.]{1,2})[.]?\\d{1,2}$") ){
                             sumAroundSymbol += Integer.parseInt(matRight.group());
-                            // System.out.printf("%s %s\n", linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 4), matRight.group());
                         }
                     }
                 }
-                // ---- BOTTOM
+                // bottom
                 String bottomPortion = linesList.get(i + 1).substring(indexOfSymbol - 1, indexOfSymbol + 2);
                 if( !bottomPortion.equals("...")){
-                    if(bottomPortion.matches("\\d+")){
+                    if(bottomPortion.matches("^\\d{3}")){
                         sumAroundSymbol += Integer.parseInt(bottomPortion);
                     } else {
-
                         String middleLeft = linesList.get(i + 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
                         Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
-                        if(matLeft.find() && linesList.get(i + 1).charAt(indexOfSymbol + 1) == '.'){ //DOESNT READ 4_4
+                        if(matLeft.find() && bottomPortion.matches("^(\\d{1}|[.]{1}[^..])\\d?([.]{1,2}[\\d]?)$") ){
                             sumAroundSymbol += Integer.parseInt(matLeft.group());
-                            // System.out.printf("%s %s\n", middleLeft, matLeft.group());
                         }
                         
                         String middleRight = linesList.get(i + 1).substring(indexOfSymbol, indexOfSymbol + 4);
                         Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
-                        if(matRight.find() && linesList.get(i + 1).charAt(indexOfSymbol - 1) == '.'){ //DOESNT READ 4_4
+                        if(matRight.find() && bottomPortion.matches("^(\\d{1}|[.]{1,2})[.]?\\d{1,2}$") ){
                             sumAroundSymbol += Integer.parseInt(matRight.group());
-                            // System.out.printf("%s %s\n", linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 4), matRight.group());
                         }
                     }
                 }
                 sum += sumAroundSymbol;
-                System.out.println(sumAroundSymbol);
+                if(sumAroundSymbol == 0){
+                    System.out.println("bruh");
+                }
+                // System.out.println(sumAroundSymbol);
                 //---------
 
             }
@@ -93,7 +90,64 @@ public class day3revamp {
         return sum;
     }
 
-    // public static _ part2(Scanner in){
-        
-    // }
+    public static int part2(Scanner in){
+        int sum = 0;
+
+        for(int i = 1; i < linesList.size() - 1; i++){
+            String line = linesList.get(i);
+            Matcher matSymbol = Pattern.compile("*").matcher(line);
+            while(matSymbol.find()){
+                
+                int sumAroundSymbol = 0;
+                int indexOfSymbol = matSymbol.start();
+
+                // top
+                String topPortion = linesList.get(i - 1).substring(indexOfSymbol - 1, indexOfSymbol + 2);
+                if( !topPortion.equals("...")){
+                    if(topPortion.matches("^\\d{3}")){
+                        sumAroundSymbol += Integer.parseInt(topPortion);
+                    } else {
+                        String middleLeft = linesList.get(i - 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
+                        Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
+                        if(matLeft.find() && topPortion.matches("^(\\d{1}|[.]{1}[^..])\\d?([.]{1,2}[\\d]?)$") ){ // INCLUDES CASE .3.
+                            sumAroundSymbol += Integer.parseInt(matLeft.group());
+                        }
+                        
+                        String middleRight = linesList.get(i - 1).substring(indexOfSymbol, indexOfSymbol + 4);
+                        Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
+                        if(matRight.find() && topPortion.matches("^(\\d{1}|[.]{1,2})[.]?\\d{1,2}$") ){
+                            sumAroundSymbol += Integer.parseInt(matRight.group());
+                        }
+                    }
+                }
+                // bottom
+                String bottomPortion = linesList.get(i + 1).substring(indexOfSymbol - 1, indexOfSymbol + 2);
+                if( !bottomPortion.equals("...")){
+                    if(bottomPortion.matches("^\\d{3}")){
+                        sumAroundSymbol += Integer.parseInt(bottomPortion);
+                    } else {
+                        String middleLeft = linesList.get(i + 1).substring(indexOfSymbol - 3, indexOfSymbol + 1);
+                        Matcher matLeft = Pattern.compile("^\\d{3}|(?<=.)\\d{2,3}|(?<=..)\\d").matcher(middleLeft);
+                        if(matLeft.find() && bottomPortion.matches("^(\\d{1}|[.]{1}[^..])\\d?([.]{1,2}[\\d]?)$") ){
+                            sumAroundSymbol += Integer.parseInt(matLeft.group());
+                        }
+                        
+                        String middleRight = linesList.get(i + 1).substring(indexOfSymbol, indexOfSymbol + 4);
+                        Matcher matRight = Pattern.compile("^\\d{2,3}|(?<=^.)\\d{2,3}|(?<=^.?)\\d").matcher(middleRight);
+                        if(matRight.find() && bottomPortion.matches("^(\\d{1}|[.]{1,2})[.]?\\d{1,2}$") ){
+                            sumAroundSymbol += Integer.parseInt(matRight.group());
+                        }
+                    }
+                }
+                sum += sumAroundSymbol;
+                if(sumAroundSymbol == 0){
+                    System.out.println("bruh");
+                }
+                // System.out.println(sumAroundSymbol);
+                //---------
+
+            }
+        }
+        return sum;
+    }
 }
