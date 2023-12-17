@@ -95,7 +95,7 @@ public class day3revamp {
 
         for(int i = 1; i < linesList.size() - 1; i++){
             String line = linesList.get(i);
-            Matcher matSymbol = Pattern.compile("[@#$%&*+=+\\-\\/]").matcher(line);
+            Matcher matSymbol = Pattern.compile("[*]").matcher(line);
             while(matSymbol.find()){
                 
                 int nums = 0;
